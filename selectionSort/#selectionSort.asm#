@@ -11,11 +11,12 @@ sorteer:
 _start:
 	;;  first argument is argc
 	pop ecx
-	;; test if non-zero
+	;; test is non-zero
 	jmp print_arv
 print_arv:
 	pop ecx
 	test ecx,ecx
+	;; when we have al the argument, we can start sorting them with selectionSort
 	jz sorteer
 	push ecx
 	call echol
