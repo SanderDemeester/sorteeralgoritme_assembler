@@ -1,5 +1,5 @@
-LD=ld -m elf_i386 -s 
-ASM=nasm -f elf
+LD=gcc -m32
+ASM=nasm -g -f elf 
 slectionsort: selectionSort.o
 	$(LD) -o selectionsort selectionSort/selectionSort.o
 selectionSort.o:
