@@ -5,8 +5,10 @@ newlineLen	equ $-newline
 	section .text
 	global _start
 sorteer:
-	pushall
-	popall
+	push ebp
+	mov ebp,esp
+	pushad
+	popad
 	ret
 _start:
 	;;  first argument is argc
