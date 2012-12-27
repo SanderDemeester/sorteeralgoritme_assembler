@@ -1,5 +1,7 @@
 *.o
 selectionsort
+*.lst
+.gitignore
 #*
 /#*
 

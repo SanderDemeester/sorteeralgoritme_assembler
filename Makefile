@@ -1,8 +1,10 @@
 LD=ld -g -m elf_i386
-ASM=nasm -f elf -g -l
+ASM=nasm -f elf -g
 
 selectionsort: selectionsort.o
-	$(LD) selectionsort/selectiosort.asm
-selectionsort.o: selectionsort/selectiosort.asm
-	$(ASM) -l selectionsort.lst selectionort/selectiosort.asm
+	$(LD) selectionsort/selectionsort.o -o selectionsort
+
+selectionsort.o: 
+
+	$(ASM) -l selectionsort.lst selectionsort/selectionsort.asm
 
