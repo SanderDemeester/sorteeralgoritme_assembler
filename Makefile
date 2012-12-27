@@ -1,6 +1,4 @@
-LD=gcc -m32
+LD=gcc -g -m32 -masm=intel
 ASM=nasm -g -f elf 
-slectionsort: selectionSort.o
+selectionsort: 
 	$(LD) -o selectionsort selectionSort/selectionSort.o
-selectionSort.o:
-	$(ASM) selectionSort/selectionSort.asm

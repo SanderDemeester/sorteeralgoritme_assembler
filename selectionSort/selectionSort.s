@@ -1,5 +1,7 @@
-section .text
-	global main
+	.intel_syntax noprefix
+	.text
+	.globl main
+	
 sorteer:
 	push ebp
 	mov ebp,esp
@@ -16,6 +18,10 @@ sorteer:
 	sub esp,8
 	leave
 	ret
+.print_char:
+	push ebp
+	mov ebp,esp
+	
 main:
 	push 3
 	push 1
