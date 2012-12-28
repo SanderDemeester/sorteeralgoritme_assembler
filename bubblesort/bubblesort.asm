@@ -1,6 +1,15 @@
+%macro write 3
+	mov eax,4		; write syscall
+	mov ebx,STDOUT		; stdout
+	mov ecx,%2		; number of bytes	
+	mov edx,%3		; buffer
+	int 80h			; call kernel
+%endmacro
+	
 section .data	
 filename	db 'nummers.txt' ; just use lenth of string
 filename_len	equ $-filename	 ; here we use a constant
+STDOUT		equ	1	 ; stdout
 	
 section .bss	
 number_of_ent resb 4		; reverse 4bytes.
@@ -32,7 +41,6 @@ ret:
 print_byte:
 	push ebp
 	mov ebp,esp
-
 	mov eax,[ebp+8]		; byte to print
 	mov dword [buf],eax
 	mov eax,4
