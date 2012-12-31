@@ -10,7 +10,7 @@ section .data
 filename	db 'nummers.txt',0 ; just use lenth of string
 filename_len	equ $-filename	 ; here we use a constant
 STDOUT		equ	1	 ; stdout
-buffer 		db 0
+buffer 		dd 0
 	
 section .bss
 	
@@ -27,20 +27,15 @@ _start:
 	js ret
 
 	mov edx,eax
-	pushad
 	mov eax,3		; syscall read
 	mov ebx,edx		; file descriptor
 	mov ecx,buffer	    	; location for storing 4 bytes
-	mov edx,1		; read 4 bytes
+	mov edx,4		; read 4 bytes
 	int 80h			; call the kernel
-	popad
+	mov eax,[buffer]
 
-	mov eax,4
-	mov ebx,STDOUT
-	mov ecx,buffer
-	mov edx,1
-	int 80h
-	call ret		; lets go home
+	write buffer,4
+	call ret		; lets go home.
 
 ret:
 	mov eax,1
