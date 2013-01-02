@@ -61,15 +61,17 @@ _start:
 	mov edx,[buffer]	; number of bytes we should read
 	int 80h			; 	
 
-
-	xor ecx,ecx		; first counter
-	xor edx,edx		; second counter
+	mov ecx,[ne]		; first counter
 
 .loop1:
 
-	inc ecx
-.loop2:	
-	cmp [nel],ecx
+	dec ecx
+	mov edx,1		; init second counter in loop
+.loop2:
+
+	
+	cmp ecx,edx
+	cmp 0,ecx
 	jne .loop1
 	
 xo	write buffer,4
