@@ -5,6 +5,23 @@
 	mov ecx,%1		; buffer
 	int 80h			; call kernel
 %endmacro
+%macro sw 2
+	push eax
+	push ebx
+
+	mov eax,%1
+	mov ebx,%2
+	
+	xor eax,ebx	
+	xor ebx,eax
+	xor eax,ebx
+
+	mov %1,eax,
+	mov %2,ebx
+	
+	pop ebx
+	pop eax
+%endmacro
 
 section .data	
 	filename	db 	'nummers.txt',0 	; just use lenth of string
@@ -13,13 +30,13 @@ section .data
 	buffer 		dd 	0		   	; buffer
 	nel		dd	0			; save the nummer of elements
 	begin_heap	dd	0			; begin heap
-	heap_pointer	dd	0			; heap pointer	
+	heap_pointer	dd	0			; heap pointer
+
 section .bss
 	
 section .text
 	global _start	
 _start:
-
 	;; read first byte from file to know how many elements there are
 	mov eax,5		; syscall open
 	mov ebx,filename	; filename
@@ -61,20 +78,24 @@ _start:
 	mov edx,[buffer]	; number of bytes we should read
 	int 80h			; 	
 
-	mov ecx,[ne]		; first counter
+	mov ecx,[nel]		; first counter
 
 .loop1:
 
 	dec ecx
+	cmp ecx,0
+	je .end
 	mov edx,1		; init second counter in loop
 .loop2:
 
 	
 	cmp ecx,edx
-	cmp 0,ecx
-	jne .loop1
+	je .loop1
+	inc edx
+	jmp .loop2
+.end:	
 	
-xo	write buffer,4
+	write buffer,4
 	call ret		; lets go home.
 
 ret:

@@ -4,5 +4,6 @@ selectionsort
 .gitignore
 #*
 /#*
+main.c
 
 
