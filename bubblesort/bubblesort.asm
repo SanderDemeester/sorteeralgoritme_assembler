@@ -85,10 +85,17 @@ _start:
 	dec ecx
 	cmp ecx,0
 	je .end
-	mov edx,1		; init second counter in loop
+	mov edx,0		; init second counter in loop
 .loop2:
 
+	mov eax,[begin_heap+edx]
+	cmp eax,[begin_heap+(edx+1)]
+	jg .n_switch
+	sw [begin_heap+edx],[begin_heap+(edx+1)]
+
+.n_switch:
 	
+
 	cmp ecx,edx
 	je .loop1
 	inc edx
