@@ -74,7 +74,7 @@ _start:
 	push eax		; save heap breakpoint
 
 	mov eax,3		; syscall read
-	mov ecx,[begin_heap]		; upper bound of our heap
+	mov ecx,[begin_heap]    ; upper bound of our heap
 	mov edx,[buffer]	; number of bytes we should read
 	int 80h			; 	
 
@@ -88,14 +88,15 @@ _start:
 	mov edx,0		; init second counter in loop
 .loop2:
 
-	mov eax,[begin_heap+edx]
-	cmp eax,[begin_heap+(edx+1)]
+	mov eax,[begin_heap+(edx*4)]
+	push dword eax
+	mov eax,[begin_heap+((edx+1)*4)]
+	cmp eax,[esp]
 	jg .n_switch
-	sw [begin_heap+edx],[begin_heap+(edx+1)]
+	sw [begin_heap+(edx+4)], [begin_heap+(edx+8)]
 
 .n_switch:
-	
-
+	add esp,4
 	cmp ecx,edx
 	je .loop1
 	inc edx
