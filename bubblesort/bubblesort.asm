@@ -79,29 +79,66 @@ _start:
 	int 80h			; 	
 
 	mov ecx,[nel]		; first counter
+	mov esi,[begin_heap]
 
 .loop1:
 
 	dec ecx
 	cmp ecx,0
-	je .end
+	jl .end
 	mov edx,0		; init second counter in loop
 .loop2:
 
-	mov eax,[begin_heap+(edx*4)]
-	push dword eax
-	mov eax,[begin_heap+((edx+1)*4)]
+	push ecx
+	mov ecx,[edx*4+esi]
+	push ecx
+	mov eax,[((edx+1)*4)+esi]
 	cmp eax,[esp]
 	jg .n_switch
-	sw [begin_heap+(edx+4)], [begin_heap+(edx+8)]
+	sw [edx*4+esi],[((edx+1)*4)+esi]
 
 .n_switch:
 	add esp,4
+	pop ecx
 	cmp ecx,edx
 	je .loop1
 	inc edx
 	jmp .loop2
-.end:	
+.end:
+	
+	mov eax,dword [esi]
+	sub eax,0
+	jnl ret
+	push eax		; save integer
+	xor ecx,ecx
+	mov ebx,10
+.l1:
+	inc ecx
+	xor edx,edx
+	div ebx
+	cmp eax,0
+	jnz .l1
+
+	mov eax,buffer
+	add eax,ecx
+	mov ebx,eax
+
+	mov byte [ebx],0
+.loop:
+	dec ebx
+	mov eax,[esi]
+	xor edx,edx
+	div ecx
+	xchg eax,edx
+	add eax,48
+	mov byte [ebx],al
+	xchg eax,edx
+	mov dword [esi],eax
+	sub eax,0
+	jnz .loop
+	
+	
+	
 	
 	write buffer,4
 	call ret		; lets go home.
