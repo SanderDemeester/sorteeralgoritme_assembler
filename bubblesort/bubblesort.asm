@@ -1,28 +1,4 @@
-%macro write 2
-	mov eax,4		; write syscall
-	mov ebx,STDOUT		; stdout
-	mov edx,%2		; number of bytes
-	mov ecx,%1		; buffer
-	int 80h			; call kernel
-%endmacro
-%macro sw 2
-	push eax
-	push ebx
-
-	mov eax,%1
-	mov ebx,%2
-	
-	xor eax,ebx	
-	xor ebx,eax
-	xor eax,ebx
-
-	mov %1,eax,
-	mov %2,ebx
-	
-	pop ebx
-	pop eax
-%endmacro
-
+%include "macro/macro.mac"
 section .data	
 	filename	db 	'nummers.txt',0 	; just use lenth of string
 	filename_len	equ 	$-filename	   	; here we use a constant
