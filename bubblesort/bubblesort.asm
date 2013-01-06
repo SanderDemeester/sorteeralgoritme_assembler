@@ -37,6 +37,8 @@ section .bss
 section .text
 	global _start	
 _start:
+	push 33
+	mov eax,dword [esp]
 	;; read first byte from file to know how many elements there are
 	mov eax,5		; syscall open
 	mov ebx,filename	; filename
@@ -105,41 +107,41 @@ _start:
 	inc edx
 	jmp .loop2
 .end:
-	
-	mov eax,dword [esi]
-	sub eax,0
-	jnl ret
+	mov eax,[esi]		; save integer to eax
+	xor ecx,ecx		; clear out ecx
+	mov esi,eax
+	;; count number of digiste required
+
 	push eax		; save integer
-	xor ecx,ecx
-	mov ebx,10
-.l1:
+	mov ebx,10		;
+.c:
 	inc ecx
 	xor edx,edx
 	div ebx
 	cmp eax,0
-	jnz .l1
+	jnz .c
 
-	mov eax,buffer
-	add eax,ecx
+	mov eax,buffer		; move buffer to eax
+	add eax,ecx		; add offset to buffer
 	mov ebx,eax
-
 	mov byte [ebx],0
-.loop:
-	dec ebx
-	mov eax,[esi]
-	xor edx,edx
-	div ecx
-	xchg eax,edx
+	
+.a:
+	dec ebx			; decrement pointer
+	mov eax,dword [esp]
+	pop eax			; bring back our integer
+	xor edx,edx		; clear out edx
+	mov ecx,10		; move 10 to ecx
+	div ecx			; div
+	xchg eax,edx		; eax is now remainer
+	
 	add eax,48
 	mov byte [ebx],al
 	xchg eax,edx
-	mov dword [esi],eax
+	mov eax,dword [esp]
 	sub eax,0
-	jnz .loop
-	
-	
-	
-	
+	jnz .a
+		
 	write buffer,4
 	call ret		; lets go home.
 
@@ -149,7 +151,154 @@ ret:
 	int 80h
 
 	
-	
+l:
+;;;  Initialize the beginning of the string to '-'
+
+	mov eax, dword [ebp+12]
+
+	mov ebx, eax
+
+	;;  ASCII code for '-'
+
+
+
+;;;  We initialize ESI to 0.
+
+	xor eax, eax
+
+	mov esi, eax
+
+
+
+;;;  Check if the integer is negative.
+
+	mov eax, dword [ebp+08]
+
+	sub eax, 0
+
+	jnl .over1
+
+	;;  If the integer is negative, we would need to increment the number.
+
+	;;  Also, we make sure the number we're dealing with is positive.
+
+	.over1:
+
+	;;  We save the integer to [ebp-4]
+
+
+
+;;;  Count the number of digits required for the string.
+
+	;;  EAX= the integer
+
+	;;  ECX= 0
+
+	;;  EBX= 10
+
+	.lp1:
+
+	;;  ECX= ECX + 1
+
+	;;  EDX= 0
+
+	;;  EAX= EAX / EBX = EAX / 10
+
+	;;  If not 0 yet,
+
+	;;  continue loop.
+
+;;;  .....
+
+
+
+	;;  ESI will be 1 if the number's negative and 0 if the number is positive.
+
+;;;  That way, this number (in ECX) would be incremented if the number is negative.
+
+
+
+;;;  Then we get the pointer.
+
+	mov eax, dword [ebp+12]
+
+	;;  We add the offset number, that we came up with earlier, to the pointer.
+
+	;;  Now the pointer points to where the NULL terminator should be, in the future.
+
+
+
+;;;  Set the byte at the memory address pointed to by the pointer to 0.
+
+	mov byte [ebx], 0
+
+
+
+;;;  This is a loop.
+
+	.lp2:
+
+	;;  We decrement the pointer.
+
+
+
+		mov eax, dword [ebp-4]
+
+		xor edx, edx
+
+		mov ecx, 10
+
+	;;  Divide the integer by 10.
+
+	;;  We'll change this back in a moment.
+
+;;;  EAX is now the remainder.
+
+		add eax, 48
+
+	;;  Set the byte pointed to by the pointer to the remainder + 48.
+
+	;;  EAX is now the integer, again.
+
+		mov dword [ebp-4], eax
+
+
+
+		sub eax, 0
+
+	;;  If the integer is not 0, we continue with the loop.
+
+	.lp2s:
+
+
+
+	popa
+
+	leave
+
+	ret 8 
+		jnz .lp2
+		xchg eax, edx
+		mov byte [ebx], al
+		xchg eax, edx
+		div ecx
+		dec ebx
+	mov ebx, eax
+	add eax, ecx
+	add ecx, esi
+		jnz .lp1
+		cmp eax, 0
+		div ebx
+		xor edx, edx
+		inc ecx
+	mov ebx, 10
+	xor ecx, ecx
+	mov eax, dword [ebp-4]
+	mov dword [ebp-4], eax
+		neg eax
+		inc esi
+	mov byte [ebx], 45
+i2str:
 
 
 	
