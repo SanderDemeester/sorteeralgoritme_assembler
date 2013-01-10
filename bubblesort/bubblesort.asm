@@ -1,4 +1,5 @@
 %include "macro/macro.mac"
+
 section .data	
 	filename	db 	'nummers.txt',0 	; just use lenth of string
 	filename_len	equ 	$-filename	   	; here we use a constant
@@ -13,8 +14,6 @@ section .bss
 section .text
 	global _start	
 _start:
-	push 33
-	mov eax,dword [esp]
 	;; read first byte from file to know how many elements there are
 	mov eax,5		; syscall open
 	mov ebx,filename	; filename
@@ -83,42 +82,15 @@ _start:
 	inc edx
 	jmp .loop2
 .end:
-	mov eax,[esi]		; save integer to eax
-	xor ecx,ecx		; clear out ecx
-	mov esi,eax
-	;; count number of digiste required
-
-	push eax		; save integer
-	mov ebx,10		;
-.c:
-	inc ecx
-	xor edx,edx
-	div ebx
-	cmp eax,0
-	jnz .c
-
-	mov eax,buffer		; move buffer to eax
-	add eax,ecx		; add offset to buffer
-	mov ebx,eax
-	mov byte [ebx],0
+	xor eax,eax
+.l1:
+	inc eax
+	mov dword [buffer],0
+	printint [eax*4+esi],buffer	
+	cmp eax,[nel]
+	jl .l1
 	
-.a:
-	dec ebx			; decrement pointer
-	mov eax,dword [esp]
-	pop eax			; bring back our integer
-	xor edx,edx		; clear out edx
-	mov ecx,10		; move 10 to ecx
-	div ecx			; div
-	xchg eax,edx		; eax is now remainer
-	
-	add eax,48
-	mov byte [ebx],al
-	xchg eax,edx
-	mov eax,dword [esp]
-	sub eax,0
-	jnz .a
-		
-	write buffer,4
+
 	call ret		; lets go home.
 
 ret:
