@@ -1,9 +1,11 @@
 %macro write 2
+        pushad
 	mov eax,4		; write syscall
 	mov ebx,STDOUT		; stdout
 	mov edx,%2		; number of bytes
 	mov ecx,%1		; buffer
 	int 80h			; call kernel
+	popad
 %endmacro
 %macro sw 2
 	push eax

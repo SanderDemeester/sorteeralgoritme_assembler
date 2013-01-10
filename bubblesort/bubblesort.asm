@@ -1,5 +1,4 @@
 %include "macro/macro.mac"
-
 section .data	
 	filename	db 	'nummers.txt',0 	; just use lenth of string
 	filename_len	equ 	$-filename	   	; here we use a constant
@@ -86,7 +85,7 @@ _start:
 .l1:
 	inc eax
 	mov dword [buffer],0
-	printint [eax*4+esi],buffer	
+	printint [eax*4+esi],buffer
 	cmp eax,[nel]
 	jl .l1
 	
