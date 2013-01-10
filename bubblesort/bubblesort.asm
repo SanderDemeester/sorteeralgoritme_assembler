@@ -1,6 +1,7 @@
 %include "macro/macro.mac"
 section .data	
 	filename	db 	'nummers.txt',0 	; just use lenth of string
+	newline		db  	12			; newline
 	filename_len	equ 	$-filename	   	; here we use a constant
 	STDOUT		equ	1	   		; stdout
 	buffer 		dd 	0		   	; buffer
@@ -86,6 +87,7 @@ _start:
 	inc eax
 	mov dword [buffer],0
 	printint [eax*4+esi],buffer
+	write newline, 1
 	cmp eax,[nel]
 	jl .l1
 	
