@@ -1,4 +1,5 @@
 %include "macro/macro.mac"
+%include "functions/generic_functions.asm"	
 section .data	
 	filename	db 	'nummers.txt',0 	; just use lenth of string
 	newline		db  	12			; newline
@@ -86,7 +87,12 @@ _start:
 .l1:
 	inc eax
 	mov dword [buffer],0
-	printint [eax*4+esi],buffer
+	pushad
+	push buffer
+	push dword [eax*4+esi]
+	call printint2
+	add esp,8
+	popad
 	write newline, 1
 	cmp eax,[nel]
 	jl .l1
