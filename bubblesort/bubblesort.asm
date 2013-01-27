@@ -89,7 +89,7 @@ _start:
 	mov dword [buffer],0
 	pushad
 	push buffer
-	push dword [eax*4+esi]
+	;; push dword [eax*4+esi]
 	call printint2
 	add esp,8
 	popad
