@@ -1,7 +1,6 @@
 printint2:
 	enter 4, 0 
 	pusha 
-	;; Initialize the beginning of the string to '-' 
 	mov eax, dword [ebp+12] 
 	mov ebx, eax 
 	mov byte [ebx], 45; ASCII code for '-'
@@ -10,7 +9,7 @@ printint2:
 	mov esi, eax 
 
 	;; check for > 0
-	mov eax, dword [ebp+08] 
+	mov eax, dword [ebp+8] 
 	sub eax, 0 
 	jnl .over1 
 	;; If the integer is negative, we would need to increment the number. 

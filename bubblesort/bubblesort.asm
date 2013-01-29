@@ -86,13 +86,13 @@ _start:
 	xor eax,eax
 .l1:
 	inc eax
-	mov dword [buffer],0
+	mov dword [buffer],0 	; clear out buffer
 	pushad
 	push buffer
-	;; push dword [eax*4+esi]
+	push dword [eax*4+esi]
 	call printint2
-	add esp,8
 	popad
+	write buffer,4		; 4 byte for int
 	write newline, 1
 	cmp eax,[nel]
 	jl .l1
