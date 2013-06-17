@@ -46,7 +46,18 @@ _start:
 	add eax,[buffer]
 	mov ebx,eax
 	mov eax,45
+	int 80h			; request some more memory
+
+	pop ebx
+	push eax
+
+	mov eax,3
+	mov ecx,[begin_heap]
+	mov edx,[buffer]
 	int 80h
+
+	mov ecx,[nel]
+	mov esi,[begin_heap]
 
 ret:	
 	mov eax,1
