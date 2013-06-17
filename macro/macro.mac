@@ -1,3 +1,4 @@
+;; print something
 %macro write 2
         pushad
 	mov eax,4		; write syscall
@@ -7,6 +8,8 @@
 	int 80h			; call kernel
 	popad
 %endmacro
+
+;; switch two locations in memory
 %macro sw 2
 	push eax
 	push ebx
