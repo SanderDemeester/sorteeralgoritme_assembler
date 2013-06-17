@@ -2,7 +2,7 @@
 %include "functions/generic_functions.asm"	
 section .data	
 	filename	db 	'nummers.txt',0 	; just use lenth of string
-	newline		db  	0Ah			; newline
+	newline		db  	0ah			; newline
 	filename_len	equ 	$-filename	   	; here we use a constant
 	STDOUT		equ	1	   		; stdout
 	buffer 		dd 	0		   	; buffer

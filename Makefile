@@ -6,6 +6,11 @@ selectionsort: selectionsort.o
 selectionsort.o: 
 	$(ASM) -l selectionsort.lst selectionsort/selectionsort.asm
 
+insertionsort: insertionsort.o
+	$(LD) insertionSort/insertionsort.o -o insertionsort_bin
+insertionsort.o: 
+	$(ASM) -l insertionsort.lst insertionSort/insertionsort.asm
+
 bubblesort: bubblesort.o
 	$(LD) bubblesort/bubblesort.o -o bubblesort_bin
 bubblesort.o: 

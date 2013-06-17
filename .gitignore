@@ -1,5 +1,6 @@
 *.o
 selectionsort
+bubblesort_bin
 *.lst
 .gitignore
 #*
@@ -9,3 +10,4 @@ a.out
 
 
 
+insertionsort_bin
