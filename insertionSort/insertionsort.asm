@@ -56,8 +56,30 @@ _start:
 	mov edx,[buffer]
 	int 80h
 
-	mov ecx,[nel]
+	mov ecx,0		; first counter
+	mov edx,[nel]		; second counter
+	mov ebx,0		; third counter
+	sub edx,1		; from 0 to nel-1
 	mov esi,[begin_heap]
+
+.l1:
+	mov eax,[ecx*4+esi]	; our element that we will use to compare	
+.l2:
+	inc ebx			; we init at zero, so increment first. forall other situations in loop this is ok
+	cmp ebx,ecx		; we can not go over the position of our choosen element
+	je .end_l2		; if they equal, we need to end this loop
+	cmp eax,[ebx*4+esi]	; compare
+	jg .l2			; if eax is bigger, we need to check the next element
+	sw [ecx*4+esi],[ebx*4+esi]
+.end_l2:	
+	mov ebx,0		; we start back at zero
+	
+	inc ecx
+	cmp ecx,edx
+	je .end
+	jmp .l1
+.end:
+	
 
 ret:	
 	mov eax,1
