@@ -84,7 +84,25 @@ _start:
 	jmp .l1
 	
 .end:
-	
+	xor eax,eax		; clear out eax
+	push buffer
+	push dword [esi]
+	call printint2
+	write buffer,4
+	write newline
+
+.l2:
+	inc eax
+	mov dword [buffer],0	; clear out buffer
+	pushad
+	push buffer
+	push dword [eax*4+esi]
+	call printint2
+	popad
+	write buffer,4
+	write newline,1
+	cmp eax,[nel]
+	jl .l2
 ret:	
 	mov eax,1
 	mov ebx,1
