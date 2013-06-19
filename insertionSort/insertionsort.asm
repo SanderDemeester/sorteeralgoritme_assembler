@@ -63,24 +63,28 @@ _start:
 	mov esi,[begin_heap]
 
 .l1:
-	mov eax,[ecx*4+esi]	; our element that we will use to compare	
-.l2:
-	inc ebx			; we init at zero, so increment first. forall other situations in loop this is ok
-	cmp ebx,ecx		; we can not go over the position of our choosen element
-	je .end_l2		; if they equal, we need to end this loop
-	cmp eax,[ebx*4+esi]	; compare
-	jg .l2			; if eax is bigger, we need to check the next element
-	sw [ecx*4+esi],[ebx*4+esi]
-.end_l2:	
-	mov ebx,0		; we start back at zero
-	
 	inc ecx
-	cmp ecx,edx
+	cmp ecx,[nel]
 	je .end
+	mov eax,[ecx*4+esi]	; place value to test in eax
+	mov ebx,ecx		; place position in array into ebx
+
+.while1:
+	cmp ebx,0		; als kleiner of gelijk 0 dan stop
+	jle .einde_while	; stop first while
+	cmp [(ebx-1)*4+esi],eax	; check second 
+	jle .einde_while	; jmp if second is less or equal then first (second,first)
+	mov edx, [(ebx-1)*4+esi]
+	mov [ebx*4+esi], edx
+	dec ebx
+	jmp .while1
+
+.einde_while:
+	mov [ebx*4+esi], eax	; insert value
 	jmp .l1
+	
 .end:
 	
-
 ret:	
 	mov eax,1
 	mov ebx,1
